@@ -1,0 +1,713 @@
+SQL Statement
+=============
+1. DDL [Data Definition Language]
+----------------------------------
+CREATE
+ALTER
+DROP
+TRUNCATE
+
+2. DML [Data Manipulation Language]
+------------------------------------
+INSERT 
+UPDATE
+DELETE
+
+3. TCL [Transaction Control Language]
+--------------------------------------
+COMMIT
+ROLLBACK
+SAVEPOINT
+
+4. DCL [Data Control Language]
+--------------------------------
+GRANT
+REVOKE
+
+5. DQL [Data Query Language]
+----------------------------
+SELECT 
+JOINS
+
+DDL Commands
+------------
+1. Creation of Database
+------------------------
+To create a database,
+CREATE DATABASE database-name;
+
+To display the databases available in MySQl,
+SHOW DATABASES;
+
+To access the Database,
+USE database-name;
+
+To display the tables available in Database,
+SHOW TABLES;
+
+=========================================================
+2. CREATION OF TABLE
+---------------------
+CREATE : This command is used to create database and its object such as tables, views, indexes etc..
+
+Syntax to create a table,
+-------------------------
+CREATE TABLE table-name
+(
+   column-1 DATATYPE CONSTRAINT NULL/NOT NULL,
+   column-2 DATATYPE CONSTRAINT NULL/NOT NULL,
+   :
+   column-n DATATYPE CONSTRAINT NULL/NOT NULL
+);
+
+
+CREATE TABLE ACCOUNTS
+(
+  ACC_NO BIGINT PRIMARY KEY,
+  ACC_HOLDER_NAME VARCHAR(20) NOT NULL,
+  PHONE BIGINT UNIQUE NOT NULL CHECK(LENGTH(PHONE)=10),
+  MAIL VARCHAR(20) UNIQUE NOT NULL
+);
+
+req -1 : ACCOUNTS
+ACC_NO BIGINT PRIMARY KEY
+ACC_HOLDER_NAME  VARCHAR(20) NOT NULL
+PHONE BIGINT UQ NN CK
+MAIL VARCHAR(20) UQ NN
+
+
+
+----------------------------------------------------------
+req -2 : BRANCH
+BID INT PK
+BNAME VARCHAR(20) NN
+PINCODE INT UQ NN
+
+CREATE TABLE BRANCH
+(
+  BID INT PRIMARY KEY,
+  BNAME VARCHAR(20) NOT NULL,
+  PINCODE INT UNIQUE NOT NULL
+);
+
+req -3: LOCATION
+PINCODE INT PK
+AREA VARCHAR(20) NN
+CITY VARCHAR(20) NN
+STATE VARCHAR(20) NN
+
+CREATE TABLE LOCATION
+(
+ PINCODE INT PRIMARY KEY,
+ AREA VARCHAR(20) NOT NULL,
+ CITY VARCHAR(20) NOT NULL,
+ STATE VARCHAR(20) NOT NULL
+);
+---------------------------------------------------------
+Note: To display the table structure,
+DESC table-name;
+===============================================================
+2. ALTER : This command is used to modify the structure of the table.
+
+Syntax:
+1. To add a column,
+ALTER TABLE table-name
+ADD column-name DATATYPES CONSTRAINT NULL/NOT NULL;
+
+ALTER TABLE ACCOUNTS
+ADD BID INT NULL;
+
+ALTER TABLE ACCOUNTS
+ADD LAST_NAME VARCHAR(10) NOT NULL AFTER ACC_HOLDER_NAME;
+
+Req-2 : Add a IFSC_Code column for BRANCH table.
+------------------------------------------------
+ALTER TABLE BRANCH
+ADD IFSC_code VARCHAR(15) UNIQUE NOT NULL;
+
+2. To delete a particular column,
+---------------------------------
+ALTER TABLE table-name
+DROP column-name;
+
+ALTER TABLE ACCOUNTS
+DROP LAST_NAME;
+
+3. To modify the datatype of a particular column,
+-------------------------------------------------
+ALTER TABLE table-name
+MODIFY column-name new-DATATYPE NULL/NOT NULL;
+
+ALTER TABLE ACCOUNTS
+MODIFY PHONE DECIMAL(10,0) NOT NULL;
+
+ALTER TABLE ACCOUNTS
+CHANGE PHONE MOBILE DECIMAL(10,0) NOT NULL;
+
+4. To change the NULL or NOT NULL
+---------------------------------
+ALTER TABLE table-name
+MODIFY column-name existing-datatype NULL/NOT NULL;
+
+ALTER TABLE ACCOUNTS
+MODIFY MAIL VARCHAR(20) NULL;
+
+5. To change the tablename
+--------------------------
+ALTER TABLE table-name
+RENAME new-table-name;
+
+ALTER TABLE ACCOUNTS
+RENAME ACC;
+
+6. To change the column-name
+----------------------------
+ALTER TABLE table-name
+CHANGE old-col-name new-col-name existing-datatype NULL/NOT NULL;
+
+ALTER TABLE ACC
+CHANGE ACC_HOLDER_NAME A_NAME VARCHAR(20) NOT NULL; 
+
+7. To add a constraint
+-----------------------
+ALTER TABLE table-name
+ADD CONSTRAINT [constraint-name] PRIMARY KEY(column-name);
+ADD CONSTRAINT [constraint-name] UNIQUE(column-name);
+ADD CONSTRAINT [constraint-name] CHECK(condition);
+ADD CONSTRAINT [constraint-name] FOREIGN KEY(column-name) REFERENCES parent-table(col-name);
+
+ALTER TABLE ACC
+ADD CONSTRAINT punith FOREIGN KEY(BID) REFERENCES BRANCH(BID);
+
+Req-2 : Add PINCODE as FK in BRANCH table
+-----------------------------------------
+ALTER TABLE BRANCH
+ADD CONSTRAINT FOREIGN KEY(PINCODE) REFERENCES LOCATION(PINCODE); 
+
+8. To drop a constraint (CHECK/FOERIGN KEY)
+-------------------------
+ALTER TABLE table-name
+DROP CONSTRAINT constraint-name;
+
+ALTER TABLE ACC
+DROP CONSTRAINT punith;
+
+
+To drop primary key,
+-------------------
+ALTER TABLE table-name
+DROP PRIMARY KEY;
+
+ALTER TABLE ACC
+DROP PRIMARY KEY;
+
+To drop UNIQUE constraint
+-------------------------
+ALTER TABLE table-name
+DROP INDEX col-name;
+
+ALTER TABLE ACC
+DROP INDEX PHONE;
+
+==========================================================
+DROP: This command is used to delete the table from the database.
+
+Syntax:
+DROP TABLE table-name;
+
+DROP TABLE ACC;
+
+==========================================================
+DML [Data Manipulation Language]
+================================
+INSERT
+UPDATE
+DELETE
+
+INSERT : This command is used to add a record inside the table.
+
+Syntax1: INSERT INTO table-name VALUES (v1,v2,...,vn),(v1,v2,..,vn),......
+
+Syntax2: INSERT INTO table-name(col1,col2,...,coln)VALUES(v1,v2,...,vn),(v1,v2,...,vn),.....
+
+-- DQL commands
+Syntax3: INSERT INTO table-name(SELECT statement);
+----------------------------------------------------------
+Syntax1:
+INSERT INTO PRODUCT VALUES (1,'Shirt',699);
+
+INSERT INTO PRODUCT VALUES (2,'Pant',899),(3,'Belt',500);
+---------------------------------------------------------
+Syntax2: INSERT INTO CUSTOMER(NAME,GENDER) VALUES ('Rahul','M');
+
+==========================================================
+UPDATE: This command is used to modify the records present in the table.
+
+Syntax:
+UPDATE table-name
+SET col1=v1,[col2=v2,..,coln=vn]
+WHERE condition;
+
+UPDATE PRODUCT
+SET PNAME='Shorts'
+WHERE PID=2;
+
+==========================================================
+DELETE : This command is used to delete a particular record from the table.
+
+Syntax: DELETE FROM table-name
+        WHERE condition;
+
+DELETE FROM PRODUCT;
+
+==========================================================
+Difference between TRUNCATE, DROP and DELETE.
+---------------------------------------------
+TRUNCATE: This command is used to erase all the records permanently from the table but table structure remains same.
+
+Syntax: TRUNCATE TABLE table-name;
+
+DROP: This command is used to delete the entire table from the database.
+
+Syntax: DROP TABLE table-name;
+
+DELETE: This command is used to delete the particular record from the table.
+
+Syntax: DELETE FROM table-name
+        WHERE condition;
+
+==========================================================
+1. WAQTD THE EMP FIRST NAME, LAST NAME FROM THE EMP TABLE.
+
+SELECT FNAME,LNAME
+FROM EMP;
+
+2. WAQTD THE EMP FNAME, SALARY, JOB FROM EMP TABLE.
+
+SELECT FNAME,SAL,JOB
+FROM EMP;
+
+3. WAQTD THE DETAILS OF EMP.
+
+SELECT * 
+FROM EMP;
+
+4. WAQTD THE EMP FNAME, SAL ALONG WITH ANNUAL SALARY.
+
+SELECT FNAME,SAL,SAL*12
+FROM EMP;
+
+5. WAQTD THE EMP FNAME, SAL, ANNUAL SALARY WITH 50000 BONUS.
+
+SELECT FNAME,SAL,SAL*12+50000
+FROM EMP;
+
+6. WAQTD THE EMP FNAME, SAL WITH 10000 RS INCENTIVES.
+
+SELECT FNAME,SAL+10000
+FROM EMP;
+
+7. WAQTD THE EMP FNAME, SAL WITH 10% INCENTIVE.
+
+SELECT FNAME,SAL+(SAL*0.1)
+FROM EMP;
+
+8. WAQTD THE EMP FNAME, SAL WITH 5% INCENTIVE.
+
+SELECT FNAME,SAL+(SAL*0.05)
+FROM EMP;
+
+9. WAQTD THE EMP FNAME, SAL WITH 3% DEDUCTION.
+
+SELECT FNAME,SAL-(SAL*0.03)
+FROM EMP;
+
+10. WAQTD THE EMP FNAME, JOB, SAL WITH 10% INCENTIVE.
+
+SELECT FNAME,JOB,SAL+(SAL*0.1) AS INCENTIVE
+FROM EMP;
+==========================================================
+ALIAS
+=====
+It is an alternative name given to the columns or the resultant table.
+
+Syntax: 
+SELECT col-name AS alias_1,
+       col-name alias_2,
+       col-name "alias 3"
+FROM table-name;
+
+> Alias can be given either by using AS keyword or "double quotes".
+> With or without using AS keyword, we can pass Alias name.
+> If any special character or spaces has to be provided, then we can prefer "double quotes".
+
+==========================================================
+11. WAQTD THE EMP FNAME, JOB AS DESIGNATION, ANNUAL SALARY AS CTC.
+
+SELECT FNAME,JOB DESIGNATION,SAL*12 "ANNUAL SALARY"
+FROM EMP;
+
+12. WAQTD THE DETAILS OF EMP ALONG WITH ANNUAL SALARY.
+
+SELECT *,SAL*12 ANNUAL_SAL
+FROM EMP;
+
+13. WAQTD THE DIFFERENT JOB ROLES AVAILABLE IN THE COMPANY.
+
+SELECT JOB
+FROM EMP;
+
+DISTINCT
+========
+> Distinct is used to avoid the duplicate records from the resultant table.
+> Either * or DISTINCT must be the very first argument.
+> Whenever multiple columns passed inside the DISTINCT, it checks for the combination.
+
+14. WAQTD THE DEPTS PRESENT IN THE EMP TABLE.
+
+SELECT DISTINCT DNO
+FROM EMP;
+
+15. WAQTD THE DETAILS OF EMP IF THE EMP FNAME IS AMAN.
+
+SELECT * 
+FROM EMP
+WHERE FNAME='AMAN';
+
+==========================================================
+SELECTION
+=========
+The process of retreiving the data from the table by using column name and row data.
+
+Syntax:
+SELECT column-name
+FROM table-name
+WHERE filter-condition;
+
+WHERE Clause
+============
+WHERE clause is used to filter the records.
+
+Characteristics of WHERE clause
+--------------------------------
+> WHERE clause executes row-by-row.
+> WHERE clause executes after FROM clause.
+> WHERE clause follows true of false condition.
+> We can pass multiple columns inside WHERE clause.
+> We cannot pass alias name inside WHERE clause.
+
+==========================================================
+16. WAQTD THE EMP FNAME, LNAME, JOB IF THE EMP IS WORKING AS MANAGER.
+
+SELECT FNAME,LNAME,JOB
+FROM EMP
+WHERE JOB='MANAGER';
+
+17. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 35000.
+
+SELECT *
+FROM EMP
+WHERE SAL>35000;
+
+18. WAQTD THE EMP FNAME, LNAME, DOB IF THE EMP FNAME IS KARAN.
+
+SELECT FNAME,LNAME,DOB
+FROM EMP
+WHERE FNAME='KARAN';
+
+19. WAQTD THE DETAILS OF EMP WHO ARE BORN AFTER THE YEAR 1995.
+
+SELECT *
+FROM EMP
+WHERE DOB>'1995-12-31';
+
+20. WAQTD THE EMP FNAME, DOJ IF THE EMP WAS JOINED BEFORE 2020.
+
+SELECT FNAME, DOJ
+FROM EMP
+WHERE DOJ<'2020-01-01';
+
+==========================================================
+OPERATORS
+=========
+> Arithmetic Operator (+,-,*,/,%)
+> Relational Operator (>,<,>=,<=,=,!=)
+> Logical Operator (AND,OR,NOT)
+> Special Operator (IN,NOT IN, IS,BETWEEN, NOT BETWEEN, LIKE, NOT LIKE)
+> Subquery Operator (ALL, ANY, EXISTS, NOT EXISTS)
+> SET Operator (UNION, UNION ALL)
+
+==========================================================
+21. WAQTD THE DETAILS OF EMP WHO ARE GETTING SALARY MORE THAN 25000 BUT LESS THAN 45000.
+
+SELECT *
+FROM EMP
+WHERE SAL>25000 AND SAL<45000;
+
+22. WAQTD THE EMP FNAME, LNAME IF THE EMP IS WORKING AS SALESMAN OR MANAGER.
+
+SELECT FNAME,LNAME
+FROM EMP
+WHERE JOB='SALESMAN' OR JOB='MANAGER';
+
+23. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING IN DEPT 112 OR 113.
+
+SELECT *
+FROM EMP
+WHERE DNO=112 OR DNO=113;
+
+24. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING AS SALESMAN AND GETTING SALARY MORE THAN 40000.
+
+SELECT *
+FROM EMP
+WHERE JOB='SALESMAN' AND SAL>40000;
+
+25. WAQTD THE DETAILS OF EMP IF THE EMP IS BORN IN THE YEAR 1995.
+
+SELECT *
+FROM EMP
+WHERE DOB>='1995-01-01' AND DOB<='1995-12-31';
+
+26. WAQTD THE EMP FNAME, LNAME, JOB, SAL IF THE EMP IS WORKING AS DISPATCHER OR DEVELOPER.
+
+SELECT FNAME,LNAME,JOB,SAL
+FROM EMP
+WHERE JOB='DISPATCHER' OR JOB='DEVELOPER';
+
+27. WAQTD THE DETAILS OF EMP EXCEPT CEO.
+
+SELECT *
+FROM EMP
+WHERE JOB!='CEO';
+
+28. WAQTD THE EMP FNAME, LNAME, GENDER WHO ARE MALE.
+
+SELECT FNAME,LNAME,GENDER
+FROM EMP
+WHERE GENDER='M';
+
+29. WAQTD THE EMP FNAME, JOB, SAL, DNO IF THE EMP IS WORKING AS SALESMAN OR MANAGER AND GETTING SALARY MORE THAN 30000 IN DEPT 111 OR 112.
+
+SELECT FNAME,JOB,SAL,DNO
+FROM EMP
+WHERE (JOB='SALESMAN' OR JOB='MANAGER') AND SAL>30000 AND (DNO=111 OR DNO=112);
+
+30. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 32000 AND WORKING AS SALESMAN, MANAGER, DISPATCHER OR DEVELOPER IN DEPT 112 OR 113.
+
+SELECT *
+FROM EMP
+WHERE SAL>32000 AND (JOB='SALESMAN' OR JOB='MANAGER' OR JOB='DEVELOPER' OR JOB='DISPATCHER') AND (DNO=112 OR DNO=113);
+
+31. WAQTD THE EMP FNAME, JOB ,DNO IF THE EMP IS WORKING AS SALESMAN OR MANAGER OR DEVELOPER IN DEPT 110,111 OR 113.
+
+SELECT FNAME,JOB,DNO
+FROM EMP
+WHERE (JOB='SALESMAN' OR JOB='MANAGER' OR JOB='DEVELOPER') AND (DNO=110 OR DNO=111 OR DNO=113);
+
+or
+
+SELECT FNAME,JOB,DNO
+FROM EMP
+WHERE JOB IN ('SALESMAN','MANAGER','DEVELOPER') AND DNO IN (110,111,113);
+
+==========================================================
+IN/NOT IN Operator
+==================
+IN operator is a multi valued operator which takes single value at LHS and multiple values at RHS.
+
+Syntax:
+   LHS                   RHS
+column-name IN/NOT IN(v1,v2,...,vn);
+
+> IN operator works in the form of OR operator.
+> NOT IN operator works in the form of AND operator.
+==========================================================
+32. WAQTD THE DETAILS OF EMP WHO ARE WORKING AS SALESMAN, MANAGER OR DISPATCHER OR DEVELOPER IN DEPT 112 OR 113 EXCEPT THE EMP GETTING SAL MORE THAN 60000.
+
+SELECT *
+FROM EMP
+WHERE JOB IN ('SALESMAN','MANAGER','DISPATCHER','DEVELOPER') AND DNO IN (112,113) AND SAL<=60000;
+
+33. WAQTD THE DETAILS OF EMP EXCEPT THE EMPS WORKING IN DEPT 110, 111,112.
+
+SELECT *
+FROM EMP
+WHERE DNO NOT IN (110,111,112);
+
+34. WAQTD THE DETAILS OF EMP WHO ARE GETTING SALARY MORE THAN OR EQUAL TO 35000 BUT LESS THAN OR EQUAL TO 45000.
+
+SELECT *
+FROM EMP
+WHERE SAL>=35000 AND SAL<=45000;
+
+or
+
+SELECT *
+FROM EMP
+WHERE SAL BETWEEN 35000 AND 45000;
+
+===============================================================
+BETWEEN/NOT BETWEEN OPERATOR
+============================
+Whenever we come across range of values, we go for BETWEEN operator.
+> BETWEEN operator includes the range values.
+
+Syntax:
+    LHS 
+column-name BETWEEN/NOT BETWEEN lower_range AND higher_range; 
+                                   >=               <=
+===============================================================
+35. WAQTD THE EMP FNAME, DOB IF THE EMP WAS BORN IN THE YEAR 1998 USING BETWEEN OPERATOR.
+
+SELECT FNAME,DOB
+FROM EMP
+WHERE DOB BETWEEN '1998-01-01' AND '1998-12-31';
+
+36. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 45000 BUT LESS THAN 70000.
+
+SELECT *
+FROM EMP
+WHERE SAL>45000 AND SAL<70000;
+
+37. WAQTD THE EMP FNAME, SAL, DNO IF THE EMP IS WORKING IN DEPT 110 OR 111 OR 113 AND GETTING SAL IN THE RANGR OF 32000 TO 45000.
+
+SELECT FNAME,SAL,DNO
+FROM EMP
+WHERE DNO IN (110,111,113) AND SAL BETWEEN 32000 AND 45000;
+
+38. WAQTD THE EMP FNAME, SAL, COMM IF THE EMP IS NOT GETTING ANY COMMISSION.
+
+SELECT FNAME,SAL,COMM
+FROM EMP
+WHERE COMM IS NULL;
+
+===============================================================
+IS OPERATOR
+===========
+IS operator is used to check whether the given condition is NULL/NOT NULL.
+
+Syntax:
+column-name IS NULL/NOT NULL;
+===============================================================
+39.WAQTD THE DETAILS OF EMP IF THE EMP IS ALSO THE CUSTOMER OF THE SAME COMPANY.
+[Hint : If the employee is also one of the customer of same company means, he will be having Customer ID(CID)].
+
+SELECT *
+FROM EMP
+WHERE CID IS NOT NULL;
+
+40. WAQTD THE DETAILS OF EMP WHO ARE GETTING COMM.
+
+SELECT *
+FROM EMP
+WHERE COMM IS NOT NULL;
+
+41. WAQTD THE EMP FNAME, MGR IF THE EMP DOESNOT HAVE ANY REPORTING MANAGER.
+
+SELECT FNAME,MGR
+FROM EMP
+WHERE MGR IS NULL;
+
+===============================================================
+LIKE Operator
+=============
+LIKE operator is a special operator used for matching the patterns.
+
+Syntax: 
+column-name LIKE/NOT LIKE 'pattern-to-match';
+
+LIKE Operators consists of two wildcards:
+-> % [Percentile] : Takes any character any number of time.
+-> _ [under_score] : Takes any character but only one character.
+
+===============================================================42. WAQTD THE DETAILS OF EMP IF THE EMP FNAME STARTS WITH 'S'.
+
+SELECT *
+FROM EMP
+WHERE FNAME LIKE 'S%';
+
+43. WAQTD THE FNAME, LNAME IF THE EMP LNAME ENDS WITH I.
+
+SELECT FNAME,LNAME
+FROM EMP
+WHERE LNAME LIKE '%I';
+
+44. WAQTD THE EMP FNAME, JOB IF THE EMP JOB ROLE CONTAINS 'MAN' IN IT.
+
+SELECT FNAME,JOB
+FROM EMP
+WHERE JOB LIKE '%MAN%';
+
+45. WAQTD THE DETAILS OF EMP IF THE EMP WAS HIRED IN THE YEAR 2021 USING LIKE OPERATOR.
+
+SELECT *
+FROM EMP
+WHERE DOJ LIKE '2021%';
+
+46. WAQTD THE DETAILS OF EMP IF THE EMP FNAME DOESNOT START WITH H.
+
+SELECT *
+FROM EMP
+WHERE FNAME NOT LIKE 'H%';
+
+47. WAQTD THE FNAME, LNAME IF THE EMP FNAME STARTS WITH S OR A.
+
+SELECT FNAME,LNAME
+FROM EMP
+WHERE FNAME LIKE 'S%' OR FNAME LIKE 'A%';
+
+48. WAQTD THE DETAILS OF EMP IF THE EMP LNAME ENDS WITH I OR Y.
+
+SELECT *
+FROM EMP
+WHERE LNAME LIKE '%I' OR LNAME LIKE '%Y';
+
+49. WAQTD THE EMP FNAME, LNAME IF THE EMP FNAME STARTS WITH K AND FNAME ENDS WITH N.
+
+SELECT FNAME,LNAME
+FROM EMP
+WHERE FNAME LIKE 'K%' AND FNAME LIKE '%N';
+
+or
+
+SELECT FNAME,LNAME
+FROM EMP
+WHERE FNAME LIKE 'K%N';
+
+50. WAQTD THE DETAILS OF EMP IF THE EMP FNAME DOESNOT STARTS WITH S BUT ENDS WITH A.
+
+SELECT *
+FROM EMP
+WHERE FNAME NOT LIKE 'S%' AND FNAME LIKE '%A';
+
+51. WAQTD THE EMP FNAME,LNAME IF THE EMP FNAME STARTS WITH VOWELS.
+
+52. WAQTD THE EMP FNAME IF THE EMP FNAME STARTS WITH S OR A BUT ENDS WITH R OR N.
+
+53. WAQTD THE DETAILS OF EMP WHO WERE BORN IN THE YEAR 1995, 1996.
+
+54. WAQTD THE DETAILS OF EMP WHOSE FNAME NOT START WITH S OR K.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
