@@ -1,0 +1,111 @@
+=========================================================
+79. WAQTD THE NUMBER OF EMPS IN EVERY DEPT IF THE DEPT MAX SALARY LESS THAN 200000 AND MIN SAL MORE THAN 30000.
+
+SELECT COUNT(*),DNO
+FROM EMP 
+GROUP BY DNO
+HAVING MAX(SAL)<200000 AND MIN(SAL)>30000; 
+
+80. WAQTD THE NUMBER OF EMPS WHO ARE GETTING SAME SALARY.
+
+SELECT COUNT(*),SAL
+FROM EMP
+GROUP BY SAL
+HAVING COUNT(*)>1;
+
+81. WAQTD THE NUMBER OF EMPS WHO WERE HIRED ON SAME DAY.
+
+SELECT COUNT(*),DOJ
+FROM EMP
+GROUP BY DOJ
+HAVING COUNT(*)>1;
+
+82. WAQTD THE NUMBER OF EMP WHO RE GETTING SAME SALARY AND WORKING IN SAME DEPT.
+
+SELECT COUNT(*),SAL,DNO
+FROM EMP
+GROUP BY SAL,DNO
+HAVING COUNT(*)>1;
+
+=======================================================
+ORDER BY
+========
+Order By clause is used to arrange the records either in ascending order or in descending order.
+
+Syntax:
+SELECT column-name
+FROM table-name
+ORDER BY column-name ASC/DESC;
+
+Characteristics of ORDER BY clause
+-----------------------------------
+> By default, the table will be arranged according to Primary key in ascending orders.
+> ORDER BY clause is the last executable clause.
+> It executes after the SELECT clause.
+> We can pass multiple columns inside ORDER BY clause.
+Whenever we pass multiple columns, it prioritize the column which has been given first.
+
+=======================================================
+83. WAQTD THE DETAILS OF EMP. ARRANGE THE RECORDS BASED ON SALARY FROM MAX TO MIN.
+
+SELECT *
+FROM EMP
+ORDER BY SAL DESC;
+
+84. WAQTD THE EMP FNAME, LNAME IN ASCENDING ORDER.
+
+SELECT FNAME,LNAME
+FROM EMP
+ORDER BY FNAME ASC;
+
+85. WAQTD THE EMP FNAME IN ASC ORDER, LNAME IN DESC ORDER.
+
+SELECT FNAME,LNAME
+FROM EMP
+ORDER BY FNAME ASC, LNAME DESC;
+======================================================
+LIMITS AND OFFSET
+=================
+LIMIT: It is used to return specified number of rows.
+
+OFFSET: It is used to ignore the specified number of rows.
+
+86. WAQTD THE TOP 5 RECORDS FROM EMP TABLE.
+
+SELECT *
+FROM EMP
+LIMIT 5;
+
+87. WAQTD THE TOP 3 RECORDS FROM EMP TABLE.
+
+SELECT *
+FROM EMP
+LIMIT 3;
+
+88. WAQTD THE TOP 2 RECORDS FROM EMP TABLE.
+
+SELECT *
+FROM EMP
+LIMIT 2;
+
+89. WAQTD THE FIRST RECORD FROM EMP TABLE.
+
+SELECT *
+FROM EMP
+LIMIT 1;
+
+90. WAQTD THE SECOND RECORD FROM EMP TABLE.
+
+SELECT *
+FROM EMP
+LIMIT 1 OFFSET 1;
+
+91. WAQTD THE 5TH RECORD FROM EMP TABLE.
+
+92. WAQTD THE 6TH AND 7TH RECORD FROM EMP TABLE.
+
+93. WAQTD THE 3RD RECORD FROM EMP TABLE.
+
+94. WAQTD THE LAST RECORD FROM EMP TABLE.
+
+95. WAQTD THE LAST 5 RECORDS FROM EMP TABLE.
