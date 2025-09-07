@@ -1,0 +1,736 @@
+SQL STATEMENTS
+==============
+
+1. DDL [Data Definition Language]
+---------------------------------
+CREATE
+UPDATE
+DROP 
+TRUNCATE
+
+2. DML [Data Manipulation Language]
+-----------------------------------
+INSERT
+UPDATE
+DELETE
+
+3. TCL [Transaction Control Language]
+-------------------------------------
+COMMIT
+ROLLBACK
+SAVEPOINT
+
+4. DCL [Data Control Language]
+------------------------------
+GRANT
+REVOKE
+
+5. DQL [Data Query Language]
+----------------------------
+SELECT
+JOINS
+
+
+1. DDL Commands
+------------
+To create  Database
+CREATE DATABASE database-name;
+
+To display the database available in MySQL,
+SHOW DATABASES;
+
+To access the Database,
+USE Database-name;
+
+To display the tables available in Database,
+SHOW TABLES;
+
+=============================================
+CREATION OF TABLE
+-----------------
+CREATE: This command is used to create database and its object such as tables, views, indexes etc..
+
+Syntax to create a table,
+-------------------------
+CREATE TABLE table-name
+(
+   column-1 DATATYPE CONSTRAINT NULL/NOT NULL,
+   column-2 DATATYPE CONSTRAINT NULL/NOT NULL,
+   :
+   column-1 DATATYPE CONSTRAINT NULL/NOT NULL,
+);
+----------------------------------------------
+Note: To display the table structure,
+DESC table-name;
+
+=============================================
+2. ALTER: This command is used to modify the structure of the table.
+
+syntax:
+1. To add a column,
+-------------------
+ALTER TABLE table-name
+ADD column-name DATATYPES CONSTRATINT NULL/NOT NULL;
+
+ALTER TABLE BRANCH
+ADD IFSC_CODE VARCHAR(20) UNIQUE NOT NULL;
+
+2. To delete a particular column,
+---------------------------------
+ALTER TABLE table-name
+DROP column-name;
+
+ALTER TABLE ACCOUNTS
+DROP BID;
+
+3. To modify the datatype of a particular column,
+-------------------------------------------------
+ALTER TABLE table-name
+MODIFY column-name new-DATABASE NULL/NOT NULL;
+
+ALTER TABLE ACCOUNTS
+MODIFY PHONE DECIMAL(10,0) NOT NULL;
+
+4. To change the NULL or NOT NULL
+---------------------------------
+ALTER TABLE table-name
+MODIFY column-name existing-datatype NULL/NOT NULL;
+
+ALTER TABLE ACC
+MODIFY MAIL VARCHAR(20) NULL;
+
+5. To change the table-name
+---------------------------
+ALTER TABLE table-name
+RENAME new-table-name;
+
+ALTER TABLE ACCOUNTS
+RENAME ACC;
+
+6. To change the column-name
+----------------------------
+ALTER TABLE table-name
+CHANGE old-col-name new-col-name existing-datatype NULL/NOT NULL;
+
+ALTER TABLE ACC
+CHANGE ACC_HOLDER_NAME A_NAME VARCHAR(20) NOT NULL;
+
+7. To add a constraint
+----------------------
+ALTER TABLE table-name
+ADD CONSTRAINT [constraint-name] PRIMARY KEY (column-name);
+ADD CONSTRAINT [constraint-name] UNIQUE (column-name);
+ADD CONSTRAINT [constraint-name] CHECK (condition);
+ADD CONSTRAINT [constraint-name] FOREIGN KEY (column-name)
+REFERENCES parent-table(col-name);
+
+ALTER TABLE ACC
+ADD CONSTRAINT AKHI FOREIGN KEY(BID) REFERENCES BRANCH(BID);
+
+ALTER TABLE BRANCH
+ADD CONSTRAINT FOREIGN KEY(PINCODE) REFERENCES LOCATION(PINCODE);
+
+8. To drop a constraint
+-----------------------
+ALTER TABLE table-name
+DROP CONSTRAINT constraint-name;
+
+ALTER TABLE ACC
+DROP CONSTRAINT AKHI;
+
+ALTER TABLE table-name
+DROP PRIMARY KEY;
+
+=========================
+DROP: This command is used to delete the table from the database.
+
+Syntax:
+DROP TABLE table-name;
+
+DROP TABLE ACC;
+
+======================
+DML [Data Manipulation Language]
+--------------------------------
+INSERT
+UPDATE
+DELETE
+
+INSERT: This command is used to add a record inside the table.
+
+Syntax 1: INSERT INTO table-name VALUES (v1,v2,....,vn),
+
+Syntax 2: INSERT INTO table-name(col1,col2,...,coln) VALUES (v1,v2,...vn),(v1,v2,...vn),...
+
+Syntax 3: INSERT INTO table-name(SELECT statements);
+------------------------------------------------------
+Syntax1
+INSERT INTO PRODUCT VALUES (1, 'shirt',699);
+
+INSERT INTO PRODUCT VALUES(2,'Pant',899),(3,'Belt',499);
+---------------------------------------------------------
+UPDATE: This command is used to modify the records present in the table.
+
+Syntax:
+UPDATE table-name
+SET col1=v1,[col2=v2,...,coln=vn]
+WHERE condition;
+
+UPDATE PRODUCT
+SET PNAME='Shorts'
+WHERE PID=2;
+==================================
+DELETE: This command is used to delete a particular record from the table.
+
+Syntax: 
+DELETE FROM table-name 
+WHERE condition;
+
+DELETE FROM PRODUCT
+WHERE PID=1;
+=============================================================================
+Difference between TRUNCATE, DROP and DELETE.
+
+TRUNCATE: This command is used to delete the erase all the records permanently from the table but the table structure remains same.
+
+Syntax: TRUNCATE TABLE table-name;
+
+DROP: This command is used to delete the entire table from the database.
+
+Syntax: DROP TABLE table-name;
+
+DELETE: This command is used to delete a particular record from the table.
+
+Syntax: 
+DELETE FROM table-name 
+WHERE condition;
+====================================================================================== 
+1. WAQTD THE EMP FIRST NAME, LAST NAME FROM THE EMP TABLE.
+
+SELECT FNAME,LNAME FROM EMP;
+--------------------------------------------------------------------------------------
+2. WAQTD THE EMP FNAME, SALARY, JOB FROM EMP TABLE.
+
+SELECT FNAME, SAL, JOB FROM EMP;
+--------------------------------------------------------------------------------------
+3. WAQTD THE DETAILS OF EMP.
+
+SELECT * FROM EMP;
+--------------------------------------------------------------------------------------
+4. WAQTD THE EMP FNAME, SAL ALONG WITH ANNUAL SALARY.
+
+SELECT FNAME,SAL, SAL*12 FROM EMP;
+--------------------------------------------------------------------------------------
+5. WAQTD THE EMP FNAME, SAL, ANNUAL SALARY WITH 50000 BONUS.
+
+SELECT FNAME, SAL,SAL*12 AS "ANNUAL_SAL", SAL*12+50000 AS "BONUS" FROM EMP;
+--------------------------------------------------------------------------------------
+6. WAQTD THE EMP FNAME, SAL WITH 10000 INCENTIVES
+
+SELECT FNAME, SAL +10000 FROM EMP;
+--------------------------------------------------------------------------------------
+7. WAQTD THE EMP FNAME, SAL WITH 10% INCENTIVE
+
+SELECT FNAME, SAL + (SAL* 10/100) FROM EMP;
+-------------------------------------------------------------------------------------- 
+8. WAQTD THE EMP FNAME, SAL WITH 5% INCENTIVE
+
+SELECT FNAME, SAL + (SAL* 5/100) FROM EMP;
+--------------------------------------------------------------------------------------
+9. WAQTD THE EMP FNAME, SAL WITH 3% DEDUCTION
+
+SELECT FNAME, SAL - (SAL* 3/100) FROM EMP;
+--------------------------------------------------------------------------------------
+10. WAQTD EMP FNAME, JOB , SAL WITH 10% INCENTIVE
+
+SELECT FNAME, JOB, SAL + (SAL*10/100) AS "10% INCENTIVE" FROM EMP;
+--------------------------------------------------------------------------------------
+11. WAQTD THE EMP FNAME, JOB AS DESIGNATION, ANNUAL SALARY AS CTC
+
+SELECT FNAME, JOB AS DESIGNATION, SAL*12 AS CTC FROM EMP;
+--------------------------------------------------------------------------------------
+12. WAQTD THE DETAILS OF EMP ALONG WITH ANNUAL SALARY
+
+SELECT *,SAL*12 AS CTC FROM EMP;
+--------------------------------------------------------------------------------------
+13. WAQTD THE DIFFERENT JOB ROLES AVAILABLE IN THE COMPANY
+
+SELECT DISTINCT JOB FROM EMP;
+
+DISTINCT
+========
+Distinct is used to remove the duplicate records from the resultant table.
+Either * or DISTINCT must be very first argument.
+--------------------------------------------------------------------------------------
+14. WAQTD THE DEPTS PRESENT IN THE EMP TABLE.
+
+SELECT DISTINCT DNO FROM EMP;
+--------------------------------------------------------------------------------------
+15. WAQTD THE DETAILS OF EMP WHERE FNAME IS AMAN
+
+SELECT * FROM EMP WHERE FNAME='AMAN';
+--------------------------------------------------------------------------------------
+16.  WAQTD THE EMP FNAME, LNAME, JOB IF THE EMP IS WORKING AS MANAGER
+
+SELECT FNAME, LNAME,JOB FROM EMP WHERE JOB='Manager';
+--------------------------------------------------------------------------------------
+17. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 35000
+
+SELECT * FROM EMP WHERE SAL>35000;
+--------------------------------------------------------------------------------------
+18. WAQTD THE EMP FNAME, LNAME, DOB IF THE EMP FNAME IS KARAN
+
+SELECT FNAME, LNAME,DOB FROM EMP WHERE FNAME='KARAN';
+--------------------------------------------------------------------------------------
+19. WAQTD THE DETAILS OF EMP WHO WERE BORN AFTER THE YEAR 1995
+
+SELECT * FROM EMP WHERE DOB>'1995-12-31';
+--------------------------------------------------------------------------------------
+20. WAQTD THE EMP FNAME, DOJ IF THE EMP WAS JOINED BEFORE 2020.
+
+SELECT FNAME, DOJ FROM EMP WHERE DOJ<'2020-01-01';
+--------------------------------------------------------------------------------------
+21. WAQTD THE DETAILS OF EMP WHO ARE GETTING SALARY MORE THAN 25000 BUT LESS THAN 45000
+
+SELET * FROM EMP WHERE SAL>25000 AND SAL<45000;
+--------------------------------------------------------------------------------------
+22. WAQTD THE EMP FNAME, LNAME IF THE EMP IS WORKING AS SALESMAN OR MANAGER.
+
+SELECT FNAME, LNAME FROM EMP WHERE JOB='SALESMAN' OR JOB='MANAGER';
+--------------------------------------------------------------------------------------
+23. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING IN DEPT 112 OR 113.
+
+SELECT * FROM EMP WHERE DNO=112 OR DNO=113;
+--------------------------------------------------------------------------------------
+24. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING AS SALESMAN AND GETTING SALARY MORE THAN 40000.
+
+SELECT * FROM EMP WHERE JOB='SALESMAN' AND SAL>40000;
+--------------------------------------------------------------------------------------
+25. WAQTD THE DETAILS OF EMP IF THE EMP IS BORN IN THE YEAR 1995
+
+SELECT * FROM EMP WHERE DOB>='1995-01-01' AND DOB<='1995-12-31';
+--------------------------------------------------------------------------------------
+26. WAQTD THE EMP FNAME, LNAME, JOB, SAL IF THE EMP IS WORKING AS DISPATCHER OR DEVELOPER.
+
+SELECT FNAME, LNAME, JOB, SAL FROM EMP WHERE JOB='DISPATCHER' OR JOB='DEVELOPER';
+--------------------------------------------------------------------------------------
+27. WAQTD THE DETAILS OF EMP EXPECT CEO.
+
+SELECT * FROM EMP WHERE NOT JOB='CEO';
+--------------------------------------------------------------------------------------
+28. WAQTD THE EMP FNAME, LNAME, GENDER WHO ARE MALE.
+
+SELECT FNAME, LNAME, GENDER FROM EMP WHERE GENDER='M';
+--------------------------------------------------------------------------------------
+29. WAQTD THE EMP FNAME, JOB , SAL, DNO IF THE EMP IS WORKING AS SALESMAN OR MANAGER AND GETTING SALARY MORE THAN 30000 IN DEPT 111 OR 112.
+
+SELECT FNAME, JOB, SAL, DNO FROM EMP WHERE (JOB='SALESMAN' OR JOB='MANAGER') AND (SAL>30000) AND (DNO=111 OR DNO=112);
+--------------------------------------------------------------------------------------
+30. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 32000 AND WORKING AS SALESMAN, MANAGER, DISPATCHER OR DEVELOPER IN DEPARTMENT 112 OR 113.
+
+SELECT * FROM EMP WHERE SAL>32000 AND (JOB='SALESMAN' OR JOB='MANAGER' OR JOB='DISPATCHER' OR JOB='DEVELOPER) AND (DNO=112 OR DNO=113);
+--------------------------------------------------------------------------------------
+31. WAQTD THE EMP FNAME, JOB, DNO IF THE EMP IS WORKING AS SALESMAN OR MANAGER OR DEVELOPER IN DEPT 110, 111 OR 113
+
+SELECT FNAME, JOB, DNO FROM EMP WHERE JOB IN('SALESMAN','MANAGER','DEVELOPER') AND DNO IN(110,111,113);
+--------------------------------------------------------------------------------------
+32. WAQTD THE DETAILS OF EMP WHO ARE WORKING AS SALESMAN, MANAGER OR DISPATCHER IN DEPT 112 OR 113 EXCEPT THE EMP GETTING SALARY MORE THAN 60000
+
+SELECT * FROM EMP WHERE JOB IN('SALESMAN','MANAGER','DISPATCHER','DEVELOPER') AND DNO IN(112,113) AND SAL<=60000;
+--------------------------------------------------------------------------------------
+33. WAQTD THE DETAILS OF EMP EXCEPT THE EMPS WORKING IN DEPT 110, 111, 112.
+
+SELECT * FROM EMP WHERE DNO NOT IN(110,111,112);
+--------------------------------------------------------------------------------------
+34. WAQTD THE DETAILS OF EMP WHO ARE GETTING SALARY MORE THAN OR EQUAL TO 35000 BUT LESS THAN OR EQUAL TO 450000.
+
+SELECT * FROM EMP WHERE SAL BETWEEN 35000 AND 45000;
+--------------------------------------------------------------------------------------
+BETWEEN  /  NOT BETWEEN OPERATOR
+================================
+Whenever we come across range of values, we go for BETWEEN operator.
+
+Syntax:
+	column-name BETWEEN/NOT BETWEEN lower_range AND higher_range;
+--------------------------------------------------------------------------------------
+35. WAQTD THE EMP FNAME, DOB IF THE EMP WAS BORN IN THE YEAR 1998 USING BETWEEN OPEATOR.
+
+SELECT FNAME, DOB FROM EMP WHERE DOB BETWEEN '1998-01-01' AND '1998-12-31';
+--------------------------------------------------------------------------------------
+36. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SALARY MORE THAN 45000 BUT LESS THAN 70000
+
+SELECT * FROM EMP WHERE SAL> 45000 AND SAL<70000;
+--------------------------------------------------------------------------------------
+37. WAQTD THE EMP FNAME, SAL, DNO IF THE EMP IS WORKING IN DEPT 110 OR 111 OR 113 AND GETTING SAL IN THE RANGE OF 32000 TO 45000.
+
+SELECT FNAME, SAL, DNO FROM EMP WHERE DNO IN(110,111,113) AND SAL BETWEEN 32000 AND 45000;
+--------------------------------------------------------------------------------------
+38. WAQTD THE EMP FNAME, SAL, COMMISSION IF THE EMP IS NOT GETTING ANY COMMISSION.
+
+SELECT FNAME, SAL, COMM FROM EMP WHERE COMM IS NULL;
+
+IS OPERATOR
+===========
+Is operator is used to check whether the given condition is NULL/ NOT NULL.
+--------------------------------------------------------------------------------------
+39. WAQTD THE DETAILS OF EMP IF THE EMP IS ALSO THE CUSTOMER OF THE SAME COMPANY.
+[ Hint : If the employee is also one of the customer of same company means, he will be having Customer ID(CID) ]
+
+SELECT * FROM EMP WHERE CID IS NOT NULL;
+--------------------------------------------------------------------------------------
+40. WAQTD THE DETAILS OF EMP WHO ARE GETTING COMM
+
+SELECT * FROM EMP WHERE COMM IS NOT NULL;
+--------------------------------------------------------------------------------------
+41. WAQTD THE FNAME, MGR IF THE EMP DOESNOT HAVE ANY REPORTING NAMAGER.
+
+SELECT FNAME, MGR FROM EMP WHERE MGR IS NULL;
+--------------------------------------------------------------------------------------
+42. WAQTD THE DETAILS OF EMP IF THE EMP FNAME STARTS WITH 'S'.
+
+SELECT * FROM EMP WHERE FNAME LIKE 'S%';
+--------------------------------------------------------------------------------------
+43. WAQTD THE FNAME, LNAME IF EMP LNAME ENDS WITH I
+
+SELECT FNAME, LNAME FROM EMP WHERE LNAME LIKE '%I';
+--------------------------------------------------------------------------------------
+44. WAQTD THE EMP FNAME, JOB IF THE EMP JOB ROLE CONTAINS 'MAN' IN IT.
+
+SELECT FNAME, JOB FROM EMP WHERE JOB LIKE '%MAN%';
+--------------------------------------------------------------------------------------
+45. WAQTD THE DETAILS OF EMP IF THE EMP WAS HIRED IN THE YEAR 2021 USING LIKE OPEARTOR
+
+SELECT * FROM EMP WHERE DOJ LIKE '%2021%';
+--------------------------------------------------------------------------------------
+46. WAQTD THE DETAILS OF EMP IF THE EMP FNAME DOESNOT START WITH H.
+
+SELECT * FROM EMP WHERE FNAME NOT LIKE 'H%',
+--------------------------------------------------------------------------------------
+47. WAQTD THE FNAME, LNAME IF THE EMP FNAME STARTS WITH S OR A.
+
+SELECT FNAME, LNAME FROM EMP WHERE FNAME LIKE 'S%' OR FNAME LIKE 'A%';
+--------------------------------------------------------------------------------------
+48. WAQTD THE DETAILS OF EMP IF THE EMP LNAME ENDS WITH I OR Y.
+
+SELECT * FROM EMP WHERE LNAME LIKE '%I' OR LNAME LIKE '%Y';
+--------------------------------------------------------------------------------------
+49. WAQTD THE EMP FNAME, LNAME IF THE EMP FNAME STARTS WITH K AND FNAME ENDS WITH N.
+
+SELECT FNAME, LNAME FROM EMP WHERE FNAME LIKE 'K%' AND FNAME LIKE '%N';
+--------------------------------------------------------------------------------------
+50. WAQTD THE DETAILS OF EMP IF THE EMP FNAME DOESNOT STARTS WITH S BUT ENDS WITH A.
+
+SELECT * FROM EMP WHERE FNAME NOT LIKE 'S%' AND FNAME LIKE '%A';
+--------------------------------------------------------------------------------------
+51. WAQTD THE EMP FNAME, LNAME IF THE EMP FNAME STARTS WITH VOWELS.
+
+SELECT FNAME, LNAME FROM EMP WHERE FNAME LIKE 'A%' OR FNAME LIKE 'E%' OR FNAME LIKE 'I%' OR FNAME LIKE 'O%' OR FNAME LIKE 'U%'; 
+--------------------------------------------------------------------------------------
+52. WAQTD THE EMP FNAME IF THE EMP FNAME STARTS WITH S OR A BUT ENDS WITH R OR N.
+
+SELECT FNAME FROM EMP WHERE (FNAME LIKE 'S%' OR FNAME LIKE 'A%') AND (FNAME LIKE'%R' OR FNAME LIKE '%N');
+--------------------------------------------------------------------------------------
+53. WAQTD THE DETAILS OF EMP WHO WERE BORN IN THE YEAR 1995,1996.
+
+SELECT * FROM EMP WHERE DOB LIKE '1995%' OR DOB LIKE '1996%';
+--------------------------------------------------------------------------------------
+54. WAQTD THE DETAILS OF EMP WHOSE FNAME NOT START WITH S OR K.
+
+SELECT * FROM EMP WHERE FNAME NOT LIKE 'S%' AND FNAME NOT LIKE 'K%';
+--------------------------------------------------------------------------------------
+55. WAQTD THE FNAME, LNAME OF THE EMP IF THE EMP NAME DOESNOT START WITH VOWELS BUT LAST NAME ENDS WITH VOWELS.
+
+SELECT FNAME, LNAME FROM EMP WHERE (FNAME NOT LIKE 'A%' AND FNAME NOT LIKE 'E%' AND FNAME NOT LIKE 'I%' AND FNAME NOT LIKE 'O%' AND FNAME NOT LIKE 'U%') AND
+(LNAME LIKE '%A' OR LNAME LIKE '%E' OR LNAME LIKE '%I' OR LNAME LIKE '%O' OR LNAME LIKE '%U'); 
+--------------------------------------------------------------------------------------
+FUNCTIONS
+=========
+1.AGGGREGATE FUNCTIONS
+2.
+3.
+4.
+5.
+======================
+56. WAQTD THE MAX SAL AND MIN SAL FROM EMP TABLE.
+
+SELECT MAX(SAL), MIN(SAL) FROM EMP;
+--------------------------------------------------------------------------------------
+57. WAQTD THE TOTAL SAL, AVG SAL GIVEN IN EMP TABLE.
+
+SELECT SUM(SAL),AVG(SAL) FROM EMP;
+--------------------------------------------------------------------------------------
+58. WAQTD THE MAX SAL AND TOTAL SAL GIVEN TO ALL THE SALESMAN.
+
+SELECT MAX(SAL),SUM(SAL) FROM EMP WHERE JOB='SALESMAN';
+--------------------------------------------------------------------------------------
+59. WAQTD THE DOJ OF 1ST EMP WHO JOINED THE COMPANY.
+
+SELECT MIN(DOJ) FROM EMP;
+--------------------------------------------------------------------------------------
+60. WAQTD THE DOB OF YOUNGEST EMP.
+
+SELECT MAX(DOB) FROM EMP;
+--------------------------------------------------------------------------------------
+61. WAQTD THE NO OF EMP IN THE COMPANY
+
+SELECT COUNT(*) FROM EMP;
+--------------------------------------------------------------------------------------
+62. WAQTD THE NUMBER OF EMPS WHO ARE WORKING IN DEPT 113.
+
+SELECT COUNT(*) FROM EMP WHERE DNO=113;
+--------------------------------------------------------------------------------------
+63. WAQTD THE MAX SAL OF THE EMP IF THE EMP FNAME STARTS WITH S OR A
+
+SELECT MAX(SAL) FROM EMP WHERE FNAME LIKE 'S%' OR FNAME LIKE 'A%';
+--------------------------------------------------------------------------------------
+64. WAQTD THE NO OF DIFF JOB ROLES AVAILABLE IN THE COMPANY.
+
+SELECT COUNT(DISTINCT JOB) FROM EMP; 
+--------------------------------------------------------------------------------------
+65. WAQTD THE NO OF EMP WORKING IN DEPT 111 OR 113.
+
+SELECT COUNT(*) FROM EMP WHERE DNO=111 OR DNO=1113;;
+--------------------------------------------------------------------------------------
+66. WAQTD THE MAX SAL, MIN SAL, TOTAL SAL, AVG SAL OF EMP EXCEPT CEO
+
+SELECT MAX(SAL),MIN(SAL),SUM(SAL),AVG(SAL) FROM EMP WHERE JOB NOT LIKE 'CEO';
+--------------------------------------------------------------------------------------
+67. WAQTD THE 
+
+SELECT COUNT(*) FROM EMP WHERE (SAL>30000 AND SAL<70000) AND (DNO=111 OR DNO=113);
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+109. WAQTD THE FIRST HALF OF THE FNAME.
+
+SELECT SUBSTR(FNAME,1,LENGTH(FNAME)/2) FROM EMP;
+--------------------------------------------------------------------------------------
+110. WAQTD THE SECOND HALF OF THE FNAME.
+
+ SELECT SUBSTR(FNAME,LENGTH(FNAME)/2+1) FROM EMP;
+--------------------------------------------------------------------------------------
+111. MALAYALAM A 4
+
+SELECT LENGTH(REPLACE('MALAYALAM','A',''));
+--------------------------------------------------------------------------------------
+112. WAQTD THE FNAMES WHICH CONTAINS EXACTLY 1 H IN IT
+
+SELECT FNAME FROM EMP WHERE LENGTH(FNAME)-LENGTH(REPLACE(lower(FNAME),'h',''))=1;
+--------------------------------------------------------------------------------------
+113. WAQTD THE FNAMES WHICH CONTAINS EXACTLY 2 A IN IT.
+
+SELECT FNAME FROM EMP WHERE LENGTH(FNAME)-LENGTH(REPLACE(lower(FNAME),'a',''))=2;
+--------------------------------------------------------------------------------------
+DATE FNCTION
+============
+SYSDATE(): This function is used to obtain current date and time.
+
+CURDATE(): This function is used to obtain the current date.
+
+CURTIME(): This function is used to obtain the current time.
+
+DATE_ADD(): This function is used to add the date based on time interval.
+Syntax: DATE_ADD(date_value, INTERVAL time_interval);
+
+DATE_SUB(): This function is used to subtract the date based on time interval.
+Syntax: DATE_SUB(date_value, INTERVAL time_interval);
+
+***DATE_FORMAT(): This function is used to convert the date values into individual characters.
+Syntax: DATE_FORMAT(date_value,format_model);
+--------------------------------------------------------------------------------------
+114. WAQTD THE AVG SAL OF EACH DEPT, ROUND OFF THE VALUE TO THE 100'S PLACE 
+
+SELECT ROUND(AVG(SAL),-2) AS AVG_SALARY,DNO FROM EMP GROUP BY DNO;
+--------------------------------------------------------------------------------------
+115. WAQTD THE EMP FNAME WHO HAS EVEN 1D
+
+SELECT FNAME FROM EMP WHERE MOD(EID,2)=0;
+--------------------------------------------------------------------------------------
+116. WAQTD THE EMP FNAME, LNAME, SAL FROM EMP IF THE EMP ID IS DIVISIBLE BY 4
+
+SELECT FNAME, LNAME, SAL FROM EMP WHERE MOD(EID,4)=0;
+--------------------------------------------------------------------------------------
+117. WAQTD THE EMP FNAME, DOB IN US FORMAT
+
+SELECT FNAME,DATE_FORMAT(DOB,'%m-%d-%Y') AS DOB FROM EMP;
+--------------------------------------------------------------------------------------
+118. WAQTD THE EMP FNAME, HIS YEAR OF BIRTH
+
+SELECT FNAME, DATE_FORMAT(DOB,'%Y')AS BIRTH_YEAR FROM EMP;
+
+               OR
+
+SELECT FNAME, YEAR(DOB) FROM EMP;
+--------------------------------------------------------------------------------------
+119. WAQTD THE EMP FNAME, DATE-MONTH OF JOINING
+
+SELECT FNAME, DATE_FORMAT(DOJ,'%d-%m') AS DATE_MONTH_JOINING FROM EMP;
+--------------------------------------------------------------------------------------
+120. WAQTD THE DETAILS OF EMP WHO JOINED THE COMPANY IN THE YEAR 2021 USING DATE_FORMAT()
+
+SELECT * FROM EMP WHERE DATE_FORMAT(DOJ,'%Y') LIKE '2021';
+--------------------------------------------------------------------------------------
+121. WAQTD THE EMP FNAME, LNAME, DOJ IF THE EMP WAS JOINED IN THE MONTH OF OCT, NOV OR DEC.
+
+SELECT FNAME, LNAME, DOJ FROM EMP WHERE DATE_FORMAT(DOJ,'%b') IN('OCT','NOV','DEC');
+
+OR
+
+SELECT FNAME, LNAME, DOJ FROM EMP WHERE MONTH(DOJ) IN(10,11,12);
+--------------------------------------------------------------------------------------
+122. WAQTD THE EMP FNAME, DOB IF THE EMP WAS BORN IN THE EVEN YEAR
+
+SELECT FNAME, DOB FROM EMP WHERE MOD(YEAR(DOB),2)=0;
+--------------------------------------------------------------------------------------
+123. WAQTD THE FNAME, DOB WHO HAS THEIR UPCOMING BDAYS (TOP 3)
+
+SELECT FNAME,DOB FROM EMP WHERE DATE_FORMAT(DOB,'%m-%d')>DATE_FORMAT(SYSDATE(),'%m-%d')
+ORDER BY DATE_FORMAT(DOB,'%m-%d')ASC LIMIT 3;
+--------------------------------------------------------------------------------------
+124. WAQTD THE FNAME, DOJ IF THE EMP WAS JOINED IN LEAP YEAR. [DIVISIBLE BY 4, 400 BUT NOT 100]
+
+SELECT FNAME, DOJ FROM EMP WHERE 
+(MOD(YEAR(DOJ),4)=0 OR MOD(YEAR(DOJ),400)=0) AND (MOD(YEAR(DOJ),100)!=0); 
+--------------------------------------------------------------------------------------
+125. WAQTD THE NUMBER OF EMP HIRED EVERY YEAR
+
+SELECT COUNT(*),YEAR(DOJ) FROM EMP GROUP BY YEAR;
+--------------------------------------------------------------------------------------
+126. WAQTD THE SAL OF KIRAN
+
+SELECT SAL FROM EMP WHERE FNAME="KIRAN";
+--------------------------------------------------------------------------------------
+127. WAQTD THE SAL IS MORE THAN 30000
+
+SELECT * FROM EMP WHERE SAL>30000;
+--------------------------------------------------------------------------------------
+128. WAQTD THE DETAILS OF EMP WHO ARE GETTING SALARY MORE THAN KIRAN'S SALARY
+
+SELECT * FROM EMP WHERE SAL>(SELECT SAL FROM EMP WHERE FNAME="KIRAN");
+-------------------------------------------------------------------------------------- 
+129. WAQTD THE EMP FNAME, LNAME, SAL IF THE EMP IS GETTING SALARY LESS THAN SAMEER
+
+SELECT FNAME,LNAME,SAL FROM EMP WHERE SAL<(SELECT SAL FROM EMP WHERE FNAME="SAMEER");
+--------------------------------------------------------------------------------------
+130. WAQTD THE DETAILS OF EMP WHO ARE WORKING IN SAME JOB ROLE AS KARAN'S JOB ROLE.
+
+SEELCT * FROM EMP WHERE JOB =(SELECT JOB FROM EMP WHERE FNAME="KARAN");
+--------------------------------------------------------------------------------------
+131. WAQTD THE EMP FNAME, LNAME, DNO IF THE EMP IS WORKING IN SAME DEPT AS KIRANS DEPT.
+
+SELECT FNAME, LNAME, DNO FROM EMP WHERE DNO= (SELECT DNO FROM EMP WHERE FNAME="KIRAN");
+--------------------------------------------------------------------------------------
+132. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING AS SALESMAN AND GETTING SALARY MORE THAN DHARANI.
+
+SELECT * FROM EMP WHERE JOB="SALESMAN" AND SAL>(SELECT SAL FROM EMP WHERE FNAME="DHARANI");
+--------------------------------------------------------------------------------------
+133. WAQTD THE EMP FNAME, SAL IF THE EMP IS GETTING SAL MORE THAN FARIYA BUT LESS THAN RAHUL SALARY.
+
+SELECT FNAME, SAL FROM EMP WHERE SAL >(SELECT SAL FROM EMP WHERE FNAME="FARIYA")AND SAL<(SELECT SAL FROM EMP WHERE FNAME="RAHUL");
+--------------------------------------------------------------------------------------
+134. WAQTD THE DETAILS OF EMP IF THE EMP IS WORKING IN SAME DEPT AS KARANS DEPT AND GETTING SALARY MORE THAN DHARANI.
+
+SELECT * FROM EMP WHERE DNO=(SELECT DNO FROM EMP WHERE FNAME="KARAN")AND SAL>(SELECT SAL FROM EMP WHERE FNAME="DHARANI");
+--------------------------------------------------------------------------------------
+135. WAQTD THE DETAILS OF EMP WHO JOINED THE COMPANY AFTER JAHNAVI.
+
+SELECT * FROM EMP WHERE DOJ>(SELECT DOJ FROM EMP WHERE FNAME="JAHNAVI");
+--------------------------------------------------------------------------------------
+136. WAQTD THE EMP FNAME, DOJ WHO JOINED 2 YEARS AFTER SAMEERS DOJ.
+
+SELECT FNAME, DOJ FROM EMP WHERE DOJ>(SELECT DATE_ADD(DOJ,INTERVAL 2 YEAR) FROM EMP WHERE FNAME="SAMEER");
+--------------------------------------------------------------------------------------
+137. WAQTD THE DETAILS OF EMP IF THE EMP IS ELDER THAN HEMA.
+
+SELECT * FROM EMP WHERE DOB>(SELECT DOB FROM EMP WHERE FNAME="HEMA")
+--------------------------------------------------------------------------------------
+138. WAQTD THE DEPT NAME OF KIRAN
+
+SELECT DNAME FROM DEPT WHERE DNO=(SELECT DNO FROM EMP WHERE FNAME="KIRAN");
+--------------------------------------------------------------------------------------
+139. WAQTD THE DEPT NAME OF AMAN
+
+SELECT DNAME FROM DEPT WHERE DNO=(SELECT DNO FROM EMP WHERE FNAME="AMAN");
+--------------------------------------------------------------------------------------
+140. WAQTD THE LOCATION OF CUSTOMER WHOSE FIRST_NAME IS ANAND
+
+SELECT LOCATION FROM LOCATION WHERE LID=(SELECT LID FROM CUSTOMER WHERE FIRST_NAME="ANAND");
+--------------------------------------------------------------------------------------
+141. WAQTD THE DETAILS OF EMP WHO ARE WORKING IN IT DEPT.
+
+SELECT * FROM EMP WHERE DNO=(SELECT DNO FROM DEPT WHERE DNAME="IT");
+--------------------------------------------------------------------------------------
+142. WAQTD THE DETAILS OF EMP WHO ARE WORKING IN IT OR HR DEPT.
+
+SELECT * from emp where dno in(select dno from dept where dname='it' or 'hr');
+--------------------------------------------------------------------------------------
+143. WAQTD THE DEPT NAME OF THE EMPS WHO ARE WORKING AS SALESMAN.
+
+SELECT DNAME FROOM DEPT WHERE DNO IN (SELECT DNO FROM EMP WHERE JOB='SALESMAN');
+--------------------------------------------------------------------------------------
+144. WAQTD THE DEPT NAME OF THE EMP WHO ARE GETTING SALARY MORE THAN FARIYA
+
+SELECT DNMAE FROM DEPT WHERE DNO IN(SELECT DNO FROM EMP WHERE SAL >(SELECT SAL FROM EMP WHERE FNAME='FARIYA'));
+--------------------------------------------------------------------------------------
+145. WAQTD THE DETAILS OF EMP WHO ARE WORKING IN IT DEPT AND GETTING SALARY MORE THAN KIRAN.
+
+SELECT * FROM EMP WHERE DNO IN(SELECT DNO FROM DEPT WHERE DNAME =('IT') AND SAL>  (SELECT SAL FROM EMP WHERE FNAME='KIRAN'));
+--------------------------------------------------------------------------------------
+146. WAQTD THE EMP FNAME, LNAME FROM EMP IF EMP IS WORKING IN KORAMANGALA. 
+
+SELECT FNAME, LNAME FROM EMP WHERE DNO IN(SELECT DNO FROM DEPT WHERE LID IN(SELECT LID FROM LOCATION WHERE LOCATION='KORAMANGALA'));
+--------------------------------------------------------------------------------------
+147. WAQTD THE DETAILS OF EMP IF THE EMP IS GETTING SAL MORE THAN KIRAN BUT WORKING IN KARNATAKA
+
+SELECT * FROM EMP WHERE SAL>(SELECT SAL FROM EMP WHERE FNAME='KIRAN')AND DNO IN (SELECT DNO FROM DEPT WHERE LID IN(SELECT LID FROM LOCATION WHERE STATE='KARNATAKA')); 
+--------------------------------------------------------------------------------------
+148. WAQTD THE CUSTOMER FNAME IF HE HAS ORDERED ANY PRODUCT.
+[HINT: IF A CUSTOMER HAS ORDERED ANY PRODUCT, HIS CUSTOMER ID WILL BE SAVED IN ORDERS TABLE]
+
+SELECT FIRST_NAME FROM CUSTOMER WHERE CID IN(SELECT CID FROM ORDERS);
+--------------------------------------------------------------------------------------
+149. WAQTD THE PRODUCT NAMES IF THE PRODUCT HAS BEEN ORDERED SO FAR.
+[HINT: IF A PRODUCT HAS BEEN ORDERED, ITS PRODUCT ID WILL BE SAVED IN ORDERS TABLE]
+
+SELECT PNAME FROM PRODUCT WHERE PRODUCT_ID IN(SELECT PRODUCT_ID FROM ORDERS);
+---------------------------------------------------------------------------------------
+150. WAQTD THE DETAILS OF CUSTOMERS WHO ARE ALSO EMPS OF THE COMPANY.
+
+SELECT * FROM CUSTOMER WHERE CID IN(SELECT CID FROM EMP);
+---------------------------------------------------------------------------------------
+151. WAQTD THE DETAILS OF CUSTOMER WHO ORDERED SMARTPHONE.
+
+SELECT * FROM CUSTOMER WHERE CID IN(SELECT CID FROM ORDERS WHERE PRODUCT_ID IN(SELECT PRODUCT_ID FROM PRODUCT WHERE PNAME='SMARTPHONE'));
+---------------------------------------------------------------------------------------
+152. WAQTD THE WORKING LOCATION DETAILS OF SALESMAN.
+
+SELECT * FROM LOCATION WHERE LID IN(SELECT LID FROM DEPT WHERE DNO IN(SELECT DNO FROM EMP WHERE JOB='SALESMAN'));
+---------------------------------------------------------------------------------------
+153. WAQTD THE DETAILS OF EMP IF THE EMP HAS DELIVERED ANY PRODUCT.
+
+SELECT * FROM EMP WHERE EID IN(SELECT EID FROM ORDERS);
+---------------------------------------------------------------------------------------
+154. WAQTD THE LOCATION OF CUSTOMERS WHO ORDERED HEADPHONES.
+
+SELECT LOCATION FROM LOCATION WHERE LID IN(SELECT LID FROM CUSTOMER WHERE CID IN(SELECT CID FROM ORDERS WHERE PRODUCT_ID IN(SELECT PRODUCT_ID FROM PRODUCT WHERE PNAME='HEADPHONES')));
+---------------------------------------------------------------------------------------
+155. WAQTD THE PRODUCTS ORDERED BY THE CUSTOMER WHOSE FNAME IS KIRAN.
+
+SELECT PNAME FROM PRODUCT WHERE PRODUCT_ID IN(SELECT PRODUCT_ID FROM ORDERS WHERE CID IN(SELECT CID FROM CUSTOMER WHERE FIRST_NAME='KIRAN'));
+---------------------------------------------------------------------------------------
+156. WAQTD THE DETAILS OF KARANS MANAGER.
+
+SELECT * FROM EMP WHERE EID IN(SELECT MGR FROM EMP WHERE FNAME='KARAN');
+---------------------------------------------------------------------------------------
+157. WAQTD THE DETAILS OF PRIYAS MANAGER.
+
+SELECT * FROM EMP WHERE EID IN(SELECT MGR FROM EMP WHERE FNAME='PRIYA');
+---------------------------------------------------
+158. WAQTD THE DEPT NAME OF SAMEERS MANAGER.
+
+SELECT JOB FROM EMP WHERE EID IN(SELECT MGR FROM EMP WHERE FNAME='SAMEER');
+---------------------------------------------------------------------------------------
+159. WAQTD THE DETAILS OF KIRANS MANAGERS MANAGER.
+
+SELECT * FROM EMP WHERE EID IN(SELECT MGR FROM EMP WHERE EID IN(SELECT MGR FROM EMP WHERE FNAME='KIRAN'));
+---------------------------------------------------------------------------------------
